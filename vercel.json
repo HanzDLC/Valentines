@@ -11,6 +11,10 @@
                 ],
                 "excludeFiles": "static/images/**"
             }
+        },
+        {
+            "src": "static/**",
+            "use": "@vercel/static"
         }
     ],
     "routes": [
