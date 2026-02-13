@@ -43,6 +43,13 @@
   },
   {
     "source_folder": "First Date",
+    "folder_description": "Pati ako gin persuade mo masaka man AHAHAHAH",
+    "image": "images/First Date/3.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "First Date",
     "folder_description": "We were walking sa esplanade and naabutan ta dawn. Hambal ko \"Picturi ko bala tas i-story.\" HAHAHA hambal mo sakon dason \"Indi nana karon lowkey, soft launch nana \"",
     "image": "images/First Date/2.jpg",
     "caption": "",
@@ -79,6 +86,13 @@
   {
     "source_folder": "Fort San Pedro Lagaw",
     "folder_description": "Amuni aton background sa Messenger🫶🫶",
+    "image": "images/Fort San Pedro/5.jpeg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "Fort San Pedro Lagaw",
+    "folder_description": "",
     "image": "images/Fort San Pedro/4.jpeg",
     "caption": "",
     "is_transition": false
@@ -112,9 +126,23 @@
     "is_transition": false
   },
   {
+    "source_folder": "Kylie's Birthday Date",
+    "folder_description": "",
+    "image": "images/Kylie's Birthday Date/4.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "Kylie's Birthday Date",
+    "folder_description": "",
+    "image": "images/Kylie's Birthday Date/5a59eb9a-d4fb-4d74-95c1-46cac65f5bbf.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
     "is_transition": true,
     "source_folder": "My Birthday Collection",
-    "folder_description": "A very memorable date😊. We planned out my brithday nga medyo bongga. May itinerary pana. Gin hulam ko dason ang polaroid ka classmate ko so that we could have physical photos of our date and we brought films. First, nagpa GT Mall para mag-ukay then nag kaon sa JD, we even got us a cake. Damo-damo pagkaon dason😭😭 AHHAAHAH. After that, nag pa downtown ta to do more ukay, After all that, nag stay kita sa Esplanade para mag pic some more. That was really really cuteeee 💖💖",
+    "folder_description": "A very memorable date😊. We planned out my brithday nga medyo bongga. May itinerary pana. Gin hulam ko dason ang polaroid ka classmate ko so that we could have physical photos of our date and we brought films. First, nagpa GT Mall para mag-ukay then nag kaon sa JD, we even got us a cake. Damo-damo pagkaon dason😭😭 AHHAAHAH. After that, nag pa downtown ta to do more ukay. After all that, nag stay kita sa Esplanade para mag pic some more. That was really really cuteeee 💖💖",
     "image": null,
     "caption": ""
   },
@@ -150,6 +178,55 @@
     "source_folder": "My Birthday Collection",
     "folder_description": "",
     "image": "images/My Birthday/5.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "is_transition": true,
+    "source_folder": "Photbooth Picsss",
+    "folder_description": "Photobooth picsss. Cutesy lang hihi",
+    "image": null,
+    "caption": ""
+  },
+  {
+    "source_folder": "Photbooth Picsss",
+    "folder_description": "",
+    "image": "images/Photobooth/Photobooth.gif",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "Photbooth Picsss",
+    "folder_description": "",
+    "image": "images/Photobooth/photobooth2.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "is_transition": true,
+    "source_folder": "Pinning Ceremony",
+    "folder_description": "Officially pinned sila duwa 🥰🥰",
+    "image": null,
+    "caption": ""
+  },
+  {
+    "source_folder": "Pinning Ceremony",
+    "folder_description": "",
+    "image": "images/Pinning Ceremony/1.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "Pinning Ceremony",
+    "folder_description": "",
+    "image": "images/Pinning Ceremony/2.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "Pinning Ceremony",
+    "folder_description": "",
+    "image": "images/Pinning Ceremony/3.jpg",
     "caption": "",
     "is_transition": false
   },
@@ -197,6 +274,76 @@
   },
   {
     "is_transition": true,
+    "source_folder": "The Way",
+    "folder_description": "This is an amazing day were the angels in heaven rejoiced. Amuni ang first time mo magbalik sa church. That day, you ga duwa-duwa kapa mag-upod sa church but I tried my best to assure you and nagkadto ka. Look at you now, glowing in Jesus.😊😊",
+    "image": null,
+    "caption": ""
+  },
+  {
+    "source_folder": "The Way",
+    "folder_description": "",
+    "image": "images/The Way/1.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "The Way",
+    "folder_description": "",
+    "image": "images/The Way/2.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "The Way",
+    "folder_description": "",
+    "image": "images/The Way/3.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "is_transition": true,
+    "source_folder": "The Way Concert",
+    "folder_description": "Day of The Way Concert. Nagpa Pitmaster pa ta to have our lunch date, cutieeesss. Then pagtapos to, nagattend na kita concert. Sa tunga-tunga sang concert, gulpi lang nag-ulan pero sige gyapon worship. That was amazing!",
+    "image": null,
+    "caption": ""
+  },
+  {
+    "source_folder": "The Way Concert",
+    "folder_description": "",
+    "image": "images/The Way Concert/1.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "The Way Concert",
+    "folder_description": "",
+    "image": "images/The Way Concert/2.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "The Way Concert",
+    "folder_description": "Gina baisan tapa kung i-post ko ang mga pics kay kesyo, indi daw nami kuha ya 😭😭",
+    "image": "images/The Way Concert/3.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "The Way Concert",
+    "folder_description": "",
+    "image": "images/The Way Concert/4.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "The Way Concert",
+    "folder_description": "mga basang sisiw liwat 🐤",
+    "image": "images/The Way Concert/5.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "is_transition": true,
     "source_folder": "The Wilted Flower Story 🥀",
     "folder_description": "Another majestic date. Amuni ang story nga first time ko maghatag sa imo sng flower. We were walking along Esplanade and you were looking at flowers. Then, gin kaptan ko ang isa ka flower and it fell down. Gin kwa ko siya and I gave it to you. You said, \"First muni nga flower gn hatag sakon\". I said, \"Really?\" then followed up with this beautiful quote \"Love, bal-an mo ngaa wilted flower? Because sang gin pa meet kita, we were not at our best. We got to know each other at out lowest point.\"And I think that's beautiful 🥹🥹",
     "image": null,
@@ -238,3 +385,4 @@
     "is_transition": false
   }
 ]
+
