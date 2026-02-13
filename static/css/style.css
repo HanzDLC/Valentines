@@ -21,7 +21,8 @@ body {
     radial-gradient(circle at 15% 15%, #ff90b8 0%, rgba(255, 144, 184, 0.3) 28%, transparent 42%),
     radial-gradient(circle at 85% 65%, #7c2448 0%, rgba(124, 36, 72, 0.42) 35%, transparent 55%),
     linear-gradient(120deg, #3f1229 0%, #611d3b 40%, #7f2a51 100%);
-  overflow: hidden;
+  overflow-x: hidden;
+  /* Prevent horizontal scroll only */
 }
 
 .background-glow {
@@ -47,12 +48,14 @@ body {
   display: grid;
   place-items: center;
   opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.45s ease;
+  visibility: hidden;
+  /* Ensure it doesn't block clicks */
+  transition: opacity 0.45s ease, visibility 0.45s ease;
 }
 
 .view.active {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
 
@@ -61,22 +64,25 @@ body {
 }
 
 .welcome-inner {
-  width: min(980px, 92vw);
-  border-radius: 28px;
+  width: min(500px, 92vw);
+  /* Reduced width further */
+  border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: linear-gradient(145deg, rgba(255, 214, 230, 0.14), rgba(255, 241, 248, 0.08));
   backdrop-filter: blur(8px);
-  padding: clamp(30px, 5vw, 72px);
+  padding: clamp(16px, 3vw, 32px);
+  /* Reduced padding further */
   box-shadow: 0 30px 80px rgba(30, 7, 17, 0.45);
   text-align: center;
 }
 
 .photobooth-container {
-  width: min(400px, 100%);
-  margin: 0 auto 24px;
-  border-radius: 20px;
+  width: min(220px, 100%);
+  /* Reduced to ~220px */
+  margin: 0 auto 16px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   border: 4px solid white;
   transform: rotate(-2deg);
 }
@@ -91,35 +97,40 @@ body {
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
+  font-size: 0.75rem;
+  /* Scaled down */
   color: #ffd2e3;
 }
 
 h1,
 h2 {
-  margin: 10px 0 16px;
+  margin: 6px 0 10px;
   font-family: "Dancing Script", cursive;
   line-height: 1.1;
   font-weight: 700;
 }
 
 h1 {
-  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  font-size: clamp(1.5rem, 4.5vw, 2.8rem);
+  /* Scaled down */
 }
 
 h2 {
-  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-size: clamp(1.2rem, 3.5vw, 1.8rem);
 }
 
 .lead,
 .photo-caption p {
   margin: 0;
-  font-size: clamp(1.08rem, 2.2vw, 1.45rem);
-  line-height: 1.7;
+  font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+  /* Scaled down */
+  line-height: 1.5;
   color: #ffe8f1;
 }
 
 .hint {
-  margin-top: 16px;
+  margin-top: 10px;
+  font-size: 0.8rem;
   color: #ffc2db;
   font-weight: 600;
 }
@@ -129,7 +140,8 @@ h2 {
 .audio-btn {
   border: none;
   border-radius: 999px;
-  padding: 12px 24px;
+  padding: 8px 16px;
+  /* Further reduced padding */
   font: inherit;
   font-weight: 700;
   cursor: pointer;
@@ -137,35 +149,68 @@ h2 {
 }
 
 .cta-btn {
-  margin-top: 20px;
+  margin-top: 14px;
   background: linear-gradient(135deg, #ff7fb0, #df4c82);
+  font-size: 0.9rem;
   color: white;
 }
 
 /* Folder Info Overlay */
 .folder-info-overlay {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  max-width: 320px;
-  padding: 16px 20px;
-  background: rgba(15, 15, 25, 0.4);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  order: 2;
+  width: 100%;
+  /* Matches player width */
+  margin: 0;
+  padding: 16px 24px;
+  background: rgba(20, 5, 10, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 192, 203, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   border-radius: 16px;
   color: #fff;
-  z-index: 100;
+  z-index: 10;
   pointer-events: none;
   opacity: 0;
-  transform: translateY(15px);
-  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  text-align: center;
+
+  /* Remove scroll if not needed, or keep it */
+  max-height: 150px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ffb7c5 transparent;
+  flex-shrink: 0;
+}
+
+/* Custom Scrollbar for Webkit */
+
+
+.folder-info-overlay h3 {
+  margin: 0 0 4px;
+  font-family: "Dancing Script", cursive;
+  font-size: 1.5rem;
+  /* ~40% smaller */
+  color: #ff9fb8;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.folder-info-overlay p {
+  margin: 0;
+  font-family: "Quicksand", sans-serif;
+  font-size: 0.95rem;
+  /* ~40% smaller */
+  line-height: 1.4;
+  color: #ffe6f0;
 }
 
 .folder-info-overlay.visible {
   opacity: 1;
   transform: translateY(0);
+  pointer-events: auto;
+  /* Allow text selection if needed */
 }
 
 /* Transition Frame */
@@ -372,29 +417,37 @@ h2 {
 }
 
 .gallery-stage {
-  width: min(1800px, 98vw);
-  height: min(1200px, 94vh);
+  width: min(90vw, 1400px);
+  height: min(80vh, 900px);
   position: relative;
-  display: grid;
-  grid-template-rows: 1fr;
-  gap: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto;
+  gap: 20px;
 }
 
 .photo-frame {
   position: relative;
+  order: 1;
+  flex: 1;
+  /* Fill the remaining height */
   width: 100%;
   height: 100%;
-  border-radius: 24px;
+  border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 24px 70px rgba(24, 6, 15, 0.55);
-  background: #1a0812;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  background: #000;
+  /* YouTube player style black background */
 }
 
 .photo-frame img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  /* Show full image, no zooming/cropping */
   display: block;
 }
 
@@ -476,13 +529,19 @@ h2 {
 
 .controls {
   position: fixed;
-  bottom: 18px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 12px;
-  z-index: 5;
+  z-index: 200;
+  /* Ensure above overlay */
+  /* Ensure it has a background so buttons are clickable if overlay is behind */
+  padding: 10px;
+  border-radius: 99px;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
 }
 
 .nav-btn {
@@ -555,7 +614,24 @@ h2 {
 
 @media (max-width: 820px) {
   .view-gallery {
-    padding: 16px 12px 78px;
+    padding: 16px 12px 100px;
+    /* More bottom padding for controls */
+  }
+
+  .folder-info-overlay {
+    width: 94%;
+    padding: 20px;
+    bottom: 80px;
+    /* Clear controls */
+  }
+
+  .folder-info-overlay h3 {
+    font-size: 2rem;
+    margin-bottom: 6px;
+  }
+
+  .folder-info-overlay p {
+    font-size: 1rem;
   }
 
   .photo-caption {

@@ -308,6 +308,27 @@
     document.addEventListener("touchstart", unlockAudio);
   }
 
+  // Unlock audio on any interaction if autoplay failed
+  const unlockAudio = () => {
+    if (bgAudio && bgAudio.paused) {
+      bgAudio.play().then(() => {
+        updateAudioState(true);
+        // Remove listeners once successful
+        document.removeEventListener("pointerdown", unlockAudio);
+        document.removeEventListener("keydown", unlockAudio);
+      }).catch(err => console.log("Audio unlock failed, waiting for next interaction"));
+    }
+  };
+
+  document.addEventListener("pointerdown", unlockAudio);
+  document.addEventListener("keydown", unlockAudio);
+
+  // Ensure Begin button specifically triggers it
+  beginBtn?.addEventListener("click", () => {
+    unlockAudio();
+    showGallery();
+  });
+
   updateControls();
   spawnHearts();
 })();
