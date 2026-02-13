@@ -1,4 +1,5 @@
-﻿from pathlib import Path
+﻿import json
+from pathlib import Path
 from typing import Optional
 
 from flask import Flask, render_template
@@ -26,50 +27,23 @@ def list_media(directory: Path, allowed_extensions: set[str]) -> list[Path]:
 
 
 def build_sequential_slides() -> list[dict]:
-    # 1. Gather all subdirectories as potential collections
-    subdirs = [d for d in IMAGES_DIR.iterdir() if d.is_dir() and not d.name.startswith('.')]
-    subdirs.sort(key=lambda d: d.name.lower()) # Alphabetical/Numbered order
-
-    all_slides = []
-
-    # Process subdirectories in order
-    for subdir in subdirs:
-        images = list_media(subdir, IMAGE_EXTENSIONS)
-        if not images:
-            continue
-        
-        # Read description.txt if it exists
-        desc_file = subdir / "description.txt"
-        folder_desc = desc_file.read_text(encoding='utf-8').strip() if desc_file.exists() else ""
-        
-        # Inject a transition slide for each folder
-        all_slides.append({
-            "is_transition": True,
-            "source_folder": subdir.name,
-            "folder_description": folder_desc,
-            "image": None
-        })
-
-        for i, img in enumerate(images, 1):
-            # Check for specific image description (e.g. image.txt for image.jpg)
-            img_desc_file = subdir / f"{img.stem}.txt"
-            img_caption = img_desc_file.read_text(encoding='utf-8').strip() if img_desc_file.exists() else ""
-
-            all_slides.append({
-                "source_folder": subdir.name,
-                "folder_description": folder_desc,
-                "image": f"images/{subdir.name}/{img.name}",
-                "caption": img_caption
-            })
-
-    if not all_slides:
+    slides_file = BASE_DIR / "slides.json"
+    if not slides_file.exists():
         return [{
             "image": "",
-            "title": "No Photos Found",
-            "caption": "Add folders with images to static/images."
+            "title": "Setup Required",
+            "caption": "Please run generate_manifest.py to create slides.json."
         }]
-
-    return all_slides
+    
+    try:
+        with open(slides_file, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        return [{
+            "image": "",
+            "title": "Error",
+            "caption": f"Failed to load slides: {e}"
+        }]
 
 
 def resolve_audio_path() -> Optional[str]:

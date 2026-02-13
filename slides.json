@@ -1,0 +1,51 @@
+[
+  {
+    "is_transition": true,
+    "source_folder": "After Church Dates",
+    "folder_description": "",
+    "image": null,
+    "caption": ""
+  },
+  {
+    "source_folder": "After Church Dates",
+    "folder_description": "",
+    "image": "images/After Church Dates/10c4fe9c-da29-4c33-84d1-b46b3830b7ed.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "After Church Dates",
+    "folder_description": "",
+    "image": "images/After Church Dates/IMG_20251207_202612_759.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "After Church Dates",
+    "folder_description": "",
+    "image": "images/After Church Dates/IMG_20251228_201150_653.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "is_transition": true,
+    "source_folder": "First Date",
+    "folder_description": "",
+    "image": null,
+    "caption": ""
+  },
+  {
+    "source_folder": "First Date",
+    "folder_description": "",
+    "image": "images/First Date/8f042c14-2b8c-4ca7-88de-3e98bcce01ae.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "First Date",
+    "folder_description": "",
+    "image": "images/First Date/a0878b8b-646a-4fa2-8465-3c1e89178049.jpg",
+    "caption": "",
+    "is_transition": false
+  }
+]
