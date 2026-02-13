@@ -5,13 +5,17 @@
   const welcomeView = document.getElementById("welcomeView");
   const galleryView = document.getElementById("galleryView");
   const endView = document.getElementById("endView");
+  const letterView = document.getElementById("letterView");
 
   const beginBtn = document.getElementById("beginBtn");
   const homeBtn = document.getElementById("homeBtn");
   const autoPlayBtn = document.getElementById("autoPlayBtn");
   const endBtn = document.getElementById("endBtn");
+  const letterBtn = document.getElementById("letterBtn");
   const replayBtn = document.getElementById("replayBtn");
   const endHomeBtn = document.getElementById("endHomeBtn");
+  const backToEndBtn = document.getElementById("backToEndBtn");
+  const letterHomeBtn = document.getElementById("letterHomeBtn");
 
   const backBtn = document.getElementById("backBtn");
   const nextBtn = document.getElementById("nextBtn");
@@ -87,6 +91,7 @@
 
     const selectedImages = [
       "images/After Church Dates/IMG_20251207_202612_759.jpg",
+      "images/After Church Dates/IMG_20251228_201150_653.jpg",
       "images/CAS Days Hosting/2.jpg",
       "images/First Date/2.jpg",
       "images/Fort San Pedro/5.jpeg",
@@ -99,6 +104,8 @@
       "images/Others/Sunday Bake Night.jpg",
       "images/Our First Major Fight/2.jpg",
       "images/Photobooth/photobooth2.jpg",
+      "images/Pinning Ceremony/1.jpg",
+      "images/Rainy Date/0.jpg",
       "images/The Way/2.jpg",
       "images/The Way Concert/2.jpg",
       "images/The Wilted Flower Story/3.jpg",
@@ -117,6 +124,25 @@
       img.alt = "Memory";
       img.src = `/static/${imagePath}`;
       card.appendChild(img);
+
+      const targetSlideIndex = slides.findIndex((slide) => slide && !slide.is_transition && slide.image === imagePath);
+      if (targetSlideIndex >= 0) {
+        card.classList.add("clickable");
+        card.setAttribute("role", "button");
+        card.tabIndex = 0;
+        card.setAttribute("aria-label", "Open this memory in slideshow");
+        card.addEventListener("click", () => {
+          currentIndex = targetSlideIndex;
+          showGallery();
+        });
+        card.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            currentIndex = targetSlideIndex;
+            showGallery();
+          }
+        });
+      }
 
       endCollage.appendChild(card);
     });
@@ -323,6 +349,7 @@
     mode = "gallery";
     welcomeView.classList.remove("active");
     endView?.classList.remove("active");
+    letterView?.classList.remove("active");
     galleryView.classList.add("active");
     animateIn(document.querySelector(".gallery-stage"));
     warmUpNearbyImages(currentIndex);
@@ -337,6 +364,7 @@
   const showWelcome = () => {
     mode = "welcome";
     endView?.classList.remove("active");
+    letterView?.classList.remove("active");
     galleryView.classList.remove("active");
     welcomeView.classList.add("active");
     animateIn(document.querySelector(".welcome-inner"));
@@ -348,8 +376,19 @@
     stopAutoAdvance();
     galleryView.classList.remove("active");
     welcomeView.classList.remove("active");
+    letterView?.classList.remove("active");
     endView?.classList.add("active");
     animateIn(document.querySelector(".end-inner"));
+  };
+
+  const showLetter = () => {
+    mode = "letter";
+    stopAutoAdvance();
+    galleryView.classList.remove("active");
+    welcomeView.classList.remove("active");
+    endView?.classList.remove("active");
+    letterView?.classList.add("active");
+    animateIn(document.querySelector(".letter-inner"));
   };
 
   const goNext = () => {
@@ -397,11 +436,14 @@
   nextBtn?.addEventListener("click", manualNext);
   backBtn?.addEventListener("click", goBack);
   endBtn?.addEventListener("click", showEnd);
+  letterBtn?.addEventListener("click", showLetter);
   replayBtn?.addEventListener("click", () => {
     currentIndex = 0;
     showGallery();
   });
   endHomeBtn?.addEventListener("click", showWelcome);
+  backToEndBtn?.addEventListener("click", showEnd);
+  letterHomeBtn?.addEventListener("click", showWelcome);
 
   document.addEventListener("keydown", (event) => {
     if (mode === "welcome") {
@@ -417,6 +459,13 @@
         event.preventDefault();
         currentIndex = 0;
         showGallery();
+      }
+      return;
+    }
+
+    if (mode === "letter") {
+      if (event.key === "Escape") {
+        showEnd();
       }
       return;
     }
