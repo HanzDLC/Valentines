@@ -1,0 +1,91 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Valentine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+
+<body>
+  <div class="background-glow"></div>
+
+  <main class="page-shell" aria-live="polite">
+    <section id="welcomeView" class="view view-welcome active">
+      <div class="welcome-inner">
+        <div class="photobooth-container">
+          <img src="{{ url_for('static', filename='images/Photobooth.gif') }}" alt="Our Photobooth"
+            class="photobooth-gif" />
+        </div>
+        <p class="eyebrow">For My Love</p>
+        <h1>Happy Valentine&rsquo;s Day, My beloved Kylie.</h1>
+        <p class="lead">
+          Every beat of my heart whispers your name. Thank you for filling my life
+          with love, laughter, and warmth.
+        </p>
+        <p class="hint">Press any key or tap Begin to open our memories.</p>
+        <button id="beginBtn" class="cta-btn" type="button">Begin Our Story</button>
+      </div>
+    </section>
+
+
+
+    <section id="galleryView" class="view view-gallery">
+      <div class="gallery-stage">
+        <div class="hearts-layer" aria-hidden="true"></div>
+        <div id="folderInfo" class="folder-info-overlay">
+          <h3 id="folderTitle"></h3>
+          <p id="folderDesc"></p>
+        </div>
+        <div id="transitionFrame" class="transition-frame">
+          <div class="transition-content">
+            <h2 id="transitionTitle"></h2>
+            <p id="transitionDesc"></p>
+          </div>
+        </div>
+        <div class="photo-frame">
+          <img id="photoImage" src="" alt="Photo memory" loading="eager" />
+          {% if slides|length == 0 %}
+          <div class="empty-photo">
+            <p>Add photos to <code>static/images</code> to start the slideshow.</p>
+          </div>
+          {% endif %}
+        </div>
+
+      </div>
+
+      <div class="controls" role="group" aria-label="Photo navigation">
+        <button id="homeBtn" type="button" class="nav-btn secondary">Home</button>
+        <button id="backBtn" type="button" class="nav-btn">Back</button>
+        <span id="slideCounter" class="counter">1 / {{ slides|length }}</span>
+        <button id="nextBtn" type="button" class="nav-btn">Next</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="audio-dock">
+    <button id="audioToggle" type="button" class="audio-btn" aria-pressed="false" {% if not audio_file %}disabled{%
+      endif %}>
+      {% if audio_file %}Play Music{% else %}No Audio Found{% endif %}
+    </button>
+    {% if audio_file %}
+    <audio id="bgAudio" preload="auto" loop autoplay>
+      <source src="{{ url_for('static', filename=audio_file) }}" />
+    </audio>
+    {% endif %}
+  </div>
+
+  <script>
+    window.__VALENTINE_SLIDES__ = {{ slides | tojson }};
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+
+</html>
