@@ -134,6 +134,19 @@
       {% if audio_file %}Play Music{% else %}No Audio Found{% endif %}
     </button>
     {% if audio_file %}
+    <div class="audio-panel-wrap">
+      <button id="audioMenuBtn" type="button" class="audio-menu-btn" aria-expanded="false">Audio Controls</button>
+      <div id="audioControls" class="audio-controls">
+        <label for="seekSlider" class="audio-label">Seek</label>
+        <input id="seekSlider" class="audio-slider" type="range" min="0" max="1000" step="1" value="0" />
+        <div class="audio-time">
+          <span id="currentTime">0:00</span>
+          <span id="totalTime">0:00</span>
+        </div>
+        <label for="volumeSlider" class="audio-label">Volume</label>
+        <input id="volumeSlider" class="audio-slider" type="range" min="0" max="100" step="1" value="60" />
+      </div>
+    </div>
     <audio id="bgAudio" preload="auto" loop autoplay>
       <source src="{{ url_for('static', filename=audio_file) }}" />
     </audio>

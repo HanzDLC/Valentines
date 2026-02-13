@@ -38,6 +38,13 @@
 
   const audioToggle = document.getElementById("audioToggle");
   const bgAudio = document.getElementById("bgAudio");
+  const audioMenuBtn = document.getElementById("audioMenuBtn");
+  const audioControls = document.getElementById("audioControls");
+  const audioPanelWrap = document.querySelector(".audio-panel-wrap");
+  const volumeSlider = document.getElementById("volumeSlider");
+  const seekSlider = document.getElementById("seekSlider");
+  const currentTimeEl = document.getElementById("currentTime");
+  const totalTimeEl = document.getElementById("totalTime");
 
   let mode = "welcome";
   let currentIndex = 0;
@@ -516,6 +523,15 @@
     audioToggle.textContent = isPlaying ? "Pause Music" : "Play Music";
   };
 
+  const formatTime = (seconds) => {
+    if (!Number.isFinite(seconds) || seconds < 0) {
+      return "0:00";
+    }
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${String(secs).padStart(2, "0")}`;
+  };
+
   const tryAutoPlay = async () => {
     if (!bgAudio) {
       return;
@@ -535,7 +551,91 @@
   };
 
   if (audioToggle && bgAudio) {
+    let isSeeking = false;
+    let controlsHideTimer = null;
+
+    const showAudioControls = () => {
+      if (!audioPanelWrap || !audioControls) {
+        return;
+      }
+      audioControls.classList.add("open");
+      audioPanelWrap.classList.remove("faded");
+      if (audioMenuBtn) {
+        audioMenuBtn.setAttribute("aria-expanded", "true");
+      }
+    };
+
+    const hideAudioControls = () => {
+      if (!audioPanelWrap || !audioControls) {
+        return;
+      }
+      if (controlsHideTimer) {
+        clearTimeout(controlsHideTimer);
+        controlsHideTimer = null;
+      }
+      audioControls.classList.remove("open");
+      audioPanelWrap.classList.add("faded");
+      if (audioMenuBtn) {
+        audioMenuBtn.setAttribute("aria-expanded", "false");
+      }
+    };
+
+    const scheduleAudioFade = () => {
+      if (!audioPanelWrap) {
+        return;
+      }
+      if (controlsHideTimer) {
+        clearTimeout(controlsHideTimer);
+      }
+      audioPanelWrap.classList.remove("faded");
+      controlsHideTimer = setTimeout(() => {
+        hideAudioControls();
+      }, 5000);
+    };
+
+    const setSeekFromAudio = () => {
+      if (!seekSlider || !currentTimeEl || !totalTimeEl) {
+        return;
+      }
+      const duration = Number.isFinite(bgAudio.duration) ? bgAudio.duration : 0;
+      const current = Number.isFinite(bgAudio.currentTime) ? bgAudio.currentTime : 0;
+      if (!isSeeking && duration > 0) {
+        seekSlider.value = String(Math.round((current / duration) * 1000));
+      }
+      currentTimeEl.textContent = formatTime(current);
+      totalTimeEl.textContent = formatTime(duration);
+    };
+
+    const storedVolume = window.localStorage?.getItem("valentine_volume");
+    const initialVolume = Number.parseInt(storedVolume ?? "60", 10);
+    const safeVolume = Number.isFinite(initialVolume) ? Math.min(Math.max(initialVolume, 0), 100) : 60;
+    bgAudio.volume = safeVolume / 100;
+    if (volumeSlider) {
+      volumeSlider.value = String(safeVolume);
+    }
+    setSeekFromAudio();
+    scheduleAudioFade();
+
+    audioMenuBtn?.addEventListener("click", () => {
+      if (!audioControls) {
+        return;
+      }
+      if (audioControls.classList.contains("open")) {
+        hideAudioControls();
+      } else {
+        showAudioControls();
+        scheduleAudioFade();
+      }
+    });
+
+    audioPanelWrap?.addEventListener("pointerenter", () => {
+      if (audioControls?.classList.contains("open")) {
+        scheduleAudioFade();
+      }
+    });
+
     audioToggle.addEventListener("click", async () => {
+      scheduleAudioFade();
       try {
         if (bgAudio.paused) {
           await bgAudio.play();
@@ -552,9 +652,46 @@
 
     bgAudio.addEventListener("pause", () => updateAudioState(false));
     bgAudio.addEventListener("play", () => updateAudioState(true));
+    bgAudio.addEventListener("timeupdate", setSeekFromAudio);
+    bgAudio.addEventListener("loadedmetadata", setSeekFromAudio);
+    bgAudio.addEventListener("durationchange", setSeekFromAudio);
+
+    volumeSlider?.addEventListener("input", () => {
+      scheduleAudioFade();
+      const volumeValue = Number.parseInt(volumeSlider.value, 10);
+      if (!Number.isFinite(volumeValue)) {
+        return;
+      }
+      const clamped = Math.min(Math.max(volumeValue, 0), 100);
+      bgAudio.volume = clamped / 100;
+      window.localStorage?.setItem("valentine_volume", String(clamped));
+    });
+
+    seekSlider?.addEventListener("pointerdown", () => {
+      isSeeking = true;
+      scheduleAudioFade();
+    });
+    seekSlider?.addEventListener("pointerup", () => {
+      isSeeking = false;
+      scheduleAudioFade();
+    });
+    seekSlider?.addEventListener("input", () => {
+      scheduleAudioFade();
+      const duration = Number.isFinite(bgAudio.duration) ? bgAudio.duration : 0;
+      const progress = Number.parseInt(seekSlider.value, 10);
+      if (duration <= 0 || !Number.isFinite(progress)) {
+        return;
+      }
+      const target = (Math.min(Math.max(progress, 0), 1000) / 1000) * duration;
+      bgAudio.currentTime = target;
+      if (currentTimeEl) {
+        currentTimeEl.textContent = formatTime(target);
+      }
+    });
 
     window.addEventListener("load", () => {
       void tryAutoPlay();
+      scheduleAudioFade();
     });
 
     const unlockAudio = () => {
