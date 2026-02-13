@@ -194,6 +194,16 @@ body {
   flex-wrap: wrap;
 }
 
+.end-actions .cta-btn,
+.end-actions .nav-btn {
+  min-height: 48px;
+  min-width: 170px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @keyframes fadePolaroid {
   from {
     opacity: 0;
