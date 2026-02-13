@@ -614,34 +614,56 @@ h2 {
 
 @media (max-width: 820px) {
   .view-gallery {
-    padding: 16px 12px 100px;
-    /* More bottom padding for controls */
+    padding: 10px;
+    height: 100vh;
+    overflow-y: auto;
+    justify-content: flex-start;
+  }
+
+  .gallery-stage {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    /* Keep player square-ish on mobile */
+    min-height: unset;
+    margin-bottom: 20px;
   }
 
   .folder-info-overlay {
-    width: 94%;
-    padding: 20px;
-    bottom: 80px;
-    /* Clear controls */
+    width: 100%;
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    margin-top: 20px;
   }
 
-  .folder-info-overlay h3 {
-    font-size: 2rem;
-    margin-bottom: 6px;
-  }
-
-  .folder-info-overlay p {
-    font-size: 1rem;
+  /* Unfix the controls on mobile so they stack below */
+  .controls {
+    position: static;
+    transform: none;
+    margin: 20px auto 40px;
+    /* Add bottom spacing for scroll */
+    background: transparent;
+    backdrop-filter: none;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .photo-caption {
-    left: 12px;
-    bottom: 12px;
-    width: calc(100% - 24px);
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    transform: none;
+    border-radius: 0 0 16px 16px;
+    /* Round bottom corners only */
   }
 
-  .lead,
-  .photo-caption p {
-    font-size: 1rem;
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 1.8rem;
   }
 }
