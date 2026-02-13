@@ -30,21 +30,63 @@
   {
     "is_transition": true,
     "source_folder": "First Date",
-    "folder_description": "",
+    "folder_description": "Our first date.\nProbably the cutest date we had. That time may gin process kita sa cultural and that was a spontaneous nga hagad. We went to Madge Cafe pagkatapos gin dala taka sa babaw sng Gaisano kay wala ka kabalo may ara pana to sang mga churches and activities. HAHA what a cute moment",
     "image": null,
     "caption": ""
   },
   {
     "source_folder": "First Date",
-    "folder_description": "",
-    "image": "images/First Date/8f042c14-2b8c-4ca7-88de-3e98bcce01ae.jpg",
+    "folder_description": "Sa amuni nga time we stopped by somewhere dira sa esplanade nga may mga plungkuan. Tapos after na, gapang explore kaya. Nagsaka kada kay gusto mo i-check AHAHAHA. Pagkita mo puno ka tubig nga higko 😭",
+    "image": "images/First Date/1.jpg",
     "caption": "",
     "is_transition": false
   },
   {
     "source_folder": "First Date",
+    "folder_description": "We were walking sa esplanade and naabutan ta dawn. Hambal ko \"Picturi ko bala tas i-story.\" HAHAHA hambal mo sakon dason \"Indi nana karon lowkey, soft launch nana \"",
+    "image": "images/First Date/2.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "is_transition": true,
+    "source_folder": "Rainy Date",
+    "folder_description": "Story time. Naglagaw ta sa festive then naglakat ta pa Sunset Boulevard. Nagstay ta to for a while tas gulpi lang nagbundak ang ulan. AAHAHHA mga basang sisiw",
+    "image": null,
+    "caption": ""
+  },
+  {
+    "source_folder": "Rainy Date",
+    "folder_description": "You loved this pic of us a lot🥹. Cutie",
+    "image": "images/Rainy Date/0.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "Rainy Date",
+    "folder_description": "AHAHAHAHA nagbundak na ulan tas isa lang payong ta. Ang gamay-gamay ko pana nga payong 😭😭",
+    "image": "images/Rainy Date/2.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "Rainy Date",
+    "folder_description": "Pangurumbot sya ihhh AHHAHAH",
+    "image": "images/Rainy Date/3.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "Rainy Date",
+    "folder_description": "Pangurumbot sya ihhh AHHAHAH",
+    "image": "images/Rainy Date/4.jpg",
+    "caption": "",
+    "is_transition": false
+  },
+  {
+    "source_folder": "Rainy Date",
     "folder_description": "",
-    "image": "images/First Date/a0878b8b-646a-4fa2-8465-3c1e89178049.jpg",
+    "image": "images/Rainy Date/5.jpg",
     "caption": "",
     "is_transition": false
   }
