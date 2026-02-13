@@ -230,6 +230,7 @@ h2 {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.6s ease;
+  overflow-y: auto;
 }
 
 .transition-frame.active {
@@ -622,11 +623,28 @@ h2 {
 
   .gallery-stage {
     width: 100%;
-    height: auto;
-    aspect-ratio: 1 / 1;
-    /* Keep player square-ish on mobile */
-    min-height: unset;
+    height: min(68dvh, 680px);
+    min-height: 460px;
+    aspect-ratio: auto;
     margin-bottom: 20px;
+  }
+
+  .transition-frame {
+    padding: 24px 18px 96px;
+  }
+
+  .transition-content {
+    max-width: 100%;
+  }
+
+  #transitionTitle {
+    font-size: clamp(2rem, 8vw, 2.8rem);
+    margin-bottom: 12px;
+  }
+
+  #transitionDesc {
+    font-size: clamp(1rem, 4.2vw, 1.2rem);
+    line-height: 1.55;
   }
 
   .folder-info-overlay {
@@ -642,7 +660,7 @@ h2 {
   .controls {
     position: static;
     transform: none;
-    margin: 20px auto 40px;
+    margin: 12px auto 32px;
     /* Add bottom spacing for scroll */
     background: transparent;
     backdrop-filter: none;
