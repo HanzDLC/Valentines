@@ -56,12 +56,14 @@
             <p>Add photos to <code>static/images</code> to start the slideshow.</p>
           </div>
           {% endif %}
+          <div id="photoCaption" class="photo-caption"></div>
         </div>
 
       </div>
 
       <div class="controls" role="group" aria-label="Photo navigation">
         <button id="homeBtn" type="button" class="nav-btn secondary">Home</button>
+        <button id="autoPlayBtn" type="button" class="nav-btn secondary playing">Pause Slideshow</button>
         <button id="backBtn" type="button" class="nav-btn">Back</button>
         <span id="slideCounter" class="counter">1 / {{ slides|length }}</span>
         <button id="nextBtn" type="button" class="nav-btn">Next</button>

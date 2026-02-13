@@ -7,6 +7,7 @@
 
   const beginBtn = document.getElementById("beginBtn");
   const homeBtn = document.getElementById("homeBtn");
+  const autoPlayBtn = document.getElementById("autoPlayBtn");
 
   const backBtn = document.getElementById("backBtn");
   const nextBtn = document.getElementById("nextBtn");
@@ -101,16 +102,36 @@
   };
 
   let autoAdvanceInterval = null;
+  let isAutoPlaying = true;
 
   const startAutoAdvance = () => {
+    if (!isAutoPlaying) return;
+
     stopAutoAdvance();
-    autoAdvanceInterval = setInterval(goNext, 3000);
+    autoAdvanceInterval = setInterval(goNext, 10000);
+    if (autoPlayBtn) {
+      autoPlayBtn.textContent = "Pause Slideshow";
+      autoPlayBtn.classList.add("playing");
+    }
   };
 
   const stopAutoAdvance = () => {
     if (autoAdvanceInterval) {
       clearInterval(autoAdvanceInterval);
       autoAdvanceInterval = null;
+    }
+    if (autoPlayBtn) {
+      autoPlayBtn.textContent = "Play Slideshow";
+      autoPlayBtn.classList.remove("playing");
+    }
+  };
+
+  const toggleAutoAdvance = () => {
+    isAutoPlaying = !isAutoPlaying;
+    if (isAutoPlaying) {
+      startAutoAdvance();
+    } else {
+      stopAutoAdvance();
     }
   };
 
@@ -121,7 +142,9 @@
     animateIn(document.querySelector(".gallery-stage"));
     renderPhoto();
     void tryAutoPlay();
-    startAutoAdvance();
+    if (isAutoPlaying) {
+      startAutoAdvance();
+    }
   };
 
   const showWelcome = () => {
@@ -159,17 +182,22 @@
     renderPhoto();
 
     // Reset timer on manual interaction
-    startAutoAdvance();
+    if (isAutoPlaying) {
+      startAutoAdvance();
+    }
   };
 
   // Manual next also resets timer
   const manualNext = () => {
     goNext();
-    startAutoAdvance();
+    if (isAutoPlaying) {
+      startAutoAdvance();
+    }
   };
 
   beginBtn?.addEventListener("click", showGallery);
   homeBtn?.addEventListener("click", showWelcome);
+  autoPlayBtn?.addEventListener("click", toggleAutoAdvance);
   nextBtn?.addEventListener("click", manualNext);
   backBtn?.addEventListener("click", goBack);
 
