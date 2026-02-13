@@ -4,14 +4,20 @@
 
   const welcomeView = document.getElementById("welcomeView");
   const galleryView = document.getElementById("galleryView");
+  const endView = document.getElementById("endView");
 
   const beginBtn = document.getElementById("beginBtn");
   const homeBtn = document.getElementById("homeBtn");
   const autoPlayBtn = document.getElementById("autoPlayBtn");
+  const endBtn = document.getElementById("endBtn");
+  const replayBtn = document.getElementById("replayBtn");
+  const endHomeBtn = document.getElementById("endHomeBtn");
 
   const backBtn = document.getElementById("backBtn");
   const nextBtn = document.getElementById("nextBtn");
   const slideCounter = document.getElementById("slideCounter");
+  const collectionJump = document.getElementById("collectionJump");
+  const collectionSelect = document.getElementById("collectionSelect");
 
   const photoFrame = document.querySelector(".photo-frame");
   const photoImage = document.getElementById("photoImage");
@@ -24,6 +30,7 @@
   const folderTitle = document.getElementById("folderTitle");
   const folderDesc = document.getElementById("folderDesc");
   const heartsLayer = document.querySelector(".hearts-layer");
+  const endCollage = document.getElementById("endCollage");
 
   const audioToggle = document.getElementById("audioToggle");
   const bgAudio = document.getElementById("bgAudio");
@@ -36,6 +43,20 @@
 
   const imageCache = new Map();
   const imageLoadPromises = new Map();
+  const transitionSlides = slides
+    .map((slide, index) => (slide.is_transition ? { index, title: slide.source_folder || `Collection ${index + 1}` } : null))
+    .filter(Boolean);
+  const slideToCollectionStart = [];
+
+  {
+    let currentStart = 0;
+    for (let i = 0; i < slides.length; i += 1) {
+      if (slides[i]?.is_transition) {
+        currentStart = i;
+      }
+      slideToCollectionStart[i] = currentStart;
+    }
+  }
 
   const animateIn = (target) => {
     if (!window.gsap || !target) {
@@ -50,6 +71,88 @@
     slideCounter.textContent = `${Math.min(currentIndex + 1, total)} / ${total}`;
     backBtn.disabled = !hasSlides || currentIndex <= 0;
     nextBtn.disabled = !hasSlides || currentIndex >= slides.length - 1;
+    if (collectionSelect && transitionSlides.length > 0) {
+      const collectionStart = slideToCollectionStart[currentIndex] ?? transitionSlides[0].index;
+      const nextValue = String(collectionStart);
+      if (collectionSelect.value !== nextValue) {
+        collectionSelect.value = nextValue;
+      }
+    }
+  };
+
+  const buildEndCollage = () => {
+    if (!endCollage) {
+      return;
+    }
+
+    const selectedImages = [
+      "images/After Church Dates/IMG_20251207_202612_759.jpg",
+      "images/CAS Days Hosting/2.jpg",
+      "images/First Date/2.jpg",
+      "images/Fort San Pedro/5.jpeg",
+      "images/Kylie's Birthday Date/4.jpg",
+      "images/My Birthday/5.jpg",
+      "images/New Year's Date/3.jpg",
+      "images/Others/After Duty Date 2.jpg",
+      "images/Others/First Devo.jpg",
+      "images/Others/Judge2.jpg",
+      "images/Others/Sunday Bake Night.jpg",
+      "images/Our First Major Fight/2.jpg",
+      "images/Photobooth/photobooth2.jpg",
+      "images/The Way/2.jpg",
+      "images/The Way Concert/2.jpg",
+      "images/The Wilted Flower Story/3.jpg",
+    ];
+
+    endCollage.innerHTML = "";
+
+    selectedImages.forEach((imagePath, index) => {
+      const card = document.createElement("figure");
+      card.className = "polaroid";
+      card.style.setProperty("--tilt", `${(Math.random() * 14 - 7).toFixed(2)}deg`);
+      card.style.setProperty("--delay", `${(index * 0.06).toFixed(2)}s`);
+
+      const img = document.createElement("img");
+      img.loading = "lazy";
+      img.alt = "Memory";
+      img.src = `/static/${imagePath}`;
+      card.appendChild(img);
+
+      endCollage.appendChild(card);
+    });
+  };
+
+  const setupCollectionJump = () => {
+    if (!collectionJump || !collectionSelect) {
+      return;
+    }
+
+    if (!hasSlides || transitionSlides.length === 0) {
+      collectionJump.classList.add("hidden");
+      collectionSelect.disabled = true;
+      return;
+    }
+
+    collectionSelect.innerHTML = "";
+    transitionSlides.forEach((entry) => {
+      const option = document.createElement("option");
+      option.value = String(entry.index);
+      option.textContent = entry.title;
+      collectionSelect.appendChild(option);
+    });
+
+    collectionSelect.value = String(slideToCollectionStart[currentIndex] ?? transitionSlides[0].index);
+    collectionSelect.addEventListener("change", () => {
+      const targetIndex = Number.parseInt(collectionSelect.value, 10);
+      if (!Number.isInteger(targetIndex)) {
+        return;
+      }
+      currentIndex = Math.min(Math.max(targetIndex, 0), slides.length - 1);
+      void renderPhoto();
+      if (isAutoPlaying) {
+        startAutoAdvance();
+      }
+    });
   };
 
   const imageUrlForSlide = (slide) => {
@@ -219,6 +322,7 @@
   const showGallery = () => {
     mode = "gallery";
     welcomeView.classList.remove("active");
+    endView?.classList.remove("active");
     galleryView.classList.add("active");
     animateIn(document.querySelector(".gallery-stage"));
     warmUpNearbyImages(currentIndex);
@@ -232,10 +336,20 @@
 
   const showWelcome = () => {
     mode = "welcome";
+    endView?.classList.remove("active");
     galleryView.classList.remove("active");
     welcomeView.classList.add("active");
     animateIn(document.querySelector(".welcome-inner"));
     stopAutoAdvance();
+  };
+
+  const showEnd = () => {
+    mode = "end";
+    stopAutoAdvance();
+    galleryView.classList.remove("active");
+    welcomeView.classList.remove("active");
+    endView?.classList.add("active");
+    animateIn(document.querySelector(".end-inner"));
   };
 
   const goNext = () => {
@@ -244,7 +358,8 @@
     }
 
     if (currentIndex >= slides.length - 1) {
-      currentIndex = 0;
+      showEnd();
+      return;
     } else {
       currentIndex += 1;
     }
@@ -281,11 +396,26 @@
   autoPlayBtn?.addEventListener("click", toggleAutoAdvance);
   nextBtn?.addEventListener("click", manualNext);
   backBtn?.addEventListener("click", goBack);
+  endBtn?.addEventListener("click", showEnd);
+  replayBtn?.addEventListener("click", () => {
+    currentIndex = 0;
+    showGallery();
+  });
+  endHomeBtn?.addEventListener("click", showWelcome);
 
   document.addEventListener("keydown", (event) => {
     if (mode === "welcome") {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
+        showGallery();
+      }
+      return;
+    }
+
+    if (mode === "end") {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        currentIndex = 0;
         showGallery();
       }
       return;
@@ -391,6 +521,8 @@
   }
 
   updateControls();
+  buildEndCollage();
+  setupCollectionJump();
   warmUpNearbyImages(0);
   spawnHearts();
 })();

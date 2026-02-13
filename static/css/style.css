@@ -63,6 +63,11 @@ body {
   padding: 24px;
 }
 
+.view-end {
+  padding: 18px;
+  overflow-y: auto;
+}
+
 .welcome-inner {
   width: min(500px, 92vw);
   /* Reduced width further */
@@ -74,6 +79,70 @@ body {
   /* Reduced padding further */
   box-shadow: 0 30px 80px rgba(30, 7, 17, 0.45);
   text-align: center;
+}
+
+.end-inner {
+  width: min(1200px, 96vw);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(145deg, rgba(255, 214, 230, 0.14), rgba(255, 241, 248, 0.08));
+  backdrop-filter: blur(8px);
+  padding: clamp(16px, 2.2vw, 30px);
+  box-shadow: 0 30px 80px rgba(30, 7, 17, 0.45);
+  text-align: center;
+}
+
+.end-collage {
+  margin: 18px auto 8px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+  padding: 18px;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 219, 233, 0.25), transparent 42%),
+    radial-gradient(circle at 80% 80%, rgba(255, 143, 184, 0.18), transparent 45%),
+    rgba(43, 12, 27, 0.44);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.polaroid {
+  margin: 0;
+  padding: 8px 8px 20px;
+  border-radius: 2px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  transform: rotate(var(--tilt, 0deg));
+  animation: fadePolaroid 0.45s ease both;
+  animation-delay: var(--delay, 0s);
+}
+
+.polaroid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.end-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+@keyframes fadePolaroid {
+  from {
+    opacity: 0;
+    transform: translateY(8px) rotate(var(--tilt, 0deg));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--tilt, 0deg));
+  }
 }
 
 .photobooth-container {
@@ -530,19 +599,64 @@ h2 {
 
 .controls {
   position: fixed;
-  bottom: 20px;
+  bottom: 14px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   z-index: 200;
   /* Ensure above overlay */
   /* Ensure it has a background so buttons are clickable if overlay is behind */
-  padding: 10px;
+  padding: 6px 8px;
   border-radius: 99px;
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(4px);
+}
+
+.collection-jump {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: min(86vw, 460px);
+  margin: 6px auto 0;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(20, 7, 14, 0.68);
+  backdrop-filter: blur(8px);
+}
+
+.collection-jump.hidden {
+  display: none;
+}
+
+.collection-jump label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #ffd2e3;
+  min-width: 68px;
+}
+
+.collection-select {
+  flex: 1 1 180px;
+  width: 100%;
+  min-width: 0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(42, 12, 27, 0.8);
+  color: #ffe8f1;
+  font-family: "Quicksand", sans-serif;
+  font-size: 0.88rem;
+  outline: none;
+}
+
+.controls .nav-btn {
+  padding: 6px 12px;
 }
 
 .nav-btn {
@@ -569,7 +683,7 @@ h2 {
 }
 
 .counter {
-  min-width: 70px;
+  min-width: 58px;
   text-align: center;
   font-weight: 800;
 }
@@ -629,6 +743,12 @@ h2 {
     margin-bottom: 20px;
   }
 
+  .end-collage {
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 10px;
+    padding: 12px;
+  }
+
   .transition-frame {
     padding: 24px 18px 96px;
   }
@@ -660,12 +780,21 @@ h2 {
   .controls {
     position: static;
     transform: none;
-    margin: 12px auto 32px;
+    margin: 8px auto 22px;
     /* Add bottom spacing for scroll */
     background: transparent;
     backdrop-filter: none;
     flex-wrap: wrap;
     justify-content: center;
+  }
+
+  .collection-jump {
+    width: min(92vw, 420px);
+    margin: 0 auto 10px;
+  }
+
+  .collection-select {
+    flex-basis: 160px;
   }
 
   .photo-caption {

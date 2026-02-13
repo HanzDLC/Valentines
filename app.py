@@ -36,7 +36,7 @@ def build_sequential_slides() -> list[dict]:
         }]
     
     try:
-        with open(slides_file, "r", encoding="utf-8") as f:
+        with open(slides_file, "r", encoding="utf-8-sig") as f:
             return json.load(f)
     except Exception as e:
         return [{

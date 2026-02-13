@@ -67,6 +67,28 @@
         <button id="backBtn" type="button" class="nav-btn">Back</button>
         <span id="slideCounter" class="counter">1 / {{ slides|length }}</span>
         <button id="nextBtn" type="button" class="nav-btn">Next</button>
+        <button id="endBtn" type="button" class="nav-btn secondary">End</button>
+      </div>
+      <div id="collectionJump" class="collection-jump" aria-label="Jump to collection">
+        <label for="collectionSelect">Collection</label>
+        <select id="collectionSelect" class="collection-select">
+          <option value="">Select a collection</option>
+        </select>
+      </div>
+    </section>
+
+    <section id="endView" class="view view-end">
+      <div class="end-inner">
+        <p class="eyebrow">Our Story</p>
+        <h2>To Be Continued...</h2>
+        <p class="lead">
+          Every memory with you is a gift. Here is a little collage of us to end this chapter.
+        </p>
+        <div id="endCollage" class="end-collage" aria-label="Memory collage"></div>
+        <div class="end-actions">
+          <button id="replayBtn" class="cta-btn" type="button">Replay Story</button>
+          <button id="endHomeBtn" class="nav-btn secondary" type="button">Home</button>
+        </div>
       </div>
     </section>
   </main>
