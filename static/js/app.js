@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   const slides = Array.isArray(window.__VALENTINE_SLIDES__) ? window.__VALENTINE_SLIDES__ : [];
   const hasSlides = slides.length > 0;
 
@@ -30,6 +30,12 @@
 
   let mode = "welcome";
   let currentIndex = 0;
+  let autoAdvanceInterval = null;
+  let isAutoPlaying = true;
+  let renderToken = 0;
+
+  const imageCache = new Map();
+  const imageLoadPromises = new Map();
 
   const animateIn = (target) => {
     if (!window.gsap || !target) {
@@ -46,22 +52,77 @@
     nextBtn.disabled = !hasSlides || currentIndex >= slides.length - 1;
   };
 
-  const renderPhoto = () => {
+  const imageUrlForSlide = (slide) => {
+    if (!slide || slide.is_transition || !slide.image) {
+      return null;
+    }
+    return `/static/${slide.image}`;
+  };
+
+  const preloadImage = (url) => {
+    if (!url) {
+      return Promise.resolve(null);
+    }
+
+    const cached = imageCache.get(url);
+    if (cached?.complete) {
+      return Promise.resolve(cached);
+    }
+
+    const pending = imageLoadPromises.get(url);
+    if (pending) {
+      return pending;
+    }
+
+    const img = cached || new Image();
+    img.decoding = "async";
+
+    const loadPromise = new Promise((resolve) => {
+      img.onload = () => {
+        imageCache.set(url, img);
+        imageLoadPromises.delete(url);
+        resolve(img);
+      };
+      img.onerror = () => {
+        imageLoadPromises.delete(url);
+        resolve(null);
+      };
+    });
+
+    imageLoadPromises.set(url, loadPromise);
+    if (!cached) {
+      img.src = url;
+      imageCache.set(url, img);
+    }
+    return loadPromise;
+  };
+
+  const warmUpNearbyImages = (index) => {
+    const offsets = [0, 1, -1, 2, -2];
+    offsets.forEach((offset) => {
+      const slide = slides[index + offset];
+      const url = imageUrlForSlide(slide);
+      if (url) {
+        void preloadImage(url);
+      }
+    });
+  };
+
+  const renderPhoto = async () => {
     if (!hasSlides) {
       updateControls();
       return;
     }
 
+    const token = ++renderToken;
     const slide = slides[currentIndex];
 
-    // Reset caption visibility
     if (photoCaption) {
       photoCaption.classList.remove("visible");
       photoCaption.textContent = "";
     }
 
     if (slide.is_transition) {
-      // Show Transition Slide
       if (photoFrame) photoFrame.classList.add("hidden");
       if (folderInfo) folderInfo.classList.remove("visible");
 
@@ -71,17 +132,35 @@
         transitionFrame.classList.add("active");
       }
     } else {
-      // Show Image Slide
       if (transitionFrame) transitionFrame.classList.remove("active");
       if (photoFrame) photoFrame.classList.remove("hidden");
 
-      if (photoImage && slide.image) {
-        photoImage.src = `/static/${slide.image}`;
+      const imageUrl = imageUrlForSlide(slide);
+      if (photoImage && imageUrl) {
+        await preloadImage(imageUrl);
+        if (token !== renderToken) {
+          return;
+        }
+
+        if (photoImage.src !== imageUrl) {
+          photoImage.src = imageUrl;
+        }
         photoImage.alt = "Our memory";
+
+        if (typeof photoImage.decode === "function") {
+          try {
+            await photoImage.decode();
+          } catch {
+            // Ignore decode errors and continue.
+          }
+        }
+
+        if (token !== renderToken) {
+          return;
+        }
         animateIn(photoImage);
       }
 
-      // Show per-image caption if available
       if (photoCaption && slide.caption) {
         photoCaption.textContent = slide.caption;
         photoCaption.classList.add("visible");
@@ -98,17 +177,18 @@
       }
     }
 
+    warmUpNearbyImages(currentIndex);
     updateControls();
   };
-
-  let autoAdvanceInterval = null;
-  let isAutoPlaying = true;
 
   const startAutoAdvance = () => {
     if (!isAutoPlaying) return;
 
     stopAutoAdvance();
-    autoAdvanceInterval = setInterval(goNext, 10000);
+    autoAdvanceInterval = setInterval(() => {
+      void goNext();
+    }, 10000);
+
     if (autoPlayBtn) {
       autoPlayBtn.textContent = "Pause Slideshow";
       autoPlayBtn.classList.add("playing");
@@ -120,6 +200,7 @@
       clearInterval(autoAdvanceInterval);
       autoAdvanceInterval = null;
     }
+
     if (autoPlayBtn) {
       autoPlayBtn.textContent = "Play Slideshow";
       autoPlayBtn.classList.remove("playing");
@@ -140,8 +221,10 @@
     welcomeView.classList.remove("active");
     galleryView.classList.add("active");
     animateIn(document.querySelector(".gallery-stage"));
-    renderPhoto();
+    warmUpNearbyImages(currentIndex);
+    void renderPhoto();
     void tryAutoPlay();
+
     if (isAutoPlaying) {
       startAutoAdvance();
     }
@@ -160,13 +243,13 @@
       return;
     }
 
-    // Loop back to start if at the end
     if (currentIndex >= slides.length - 1) {
       currentIndex = 0;
     } else {
       currentIndex += 1;
     }
-    renderPhoto();
+
+    void renderPhoto();
   };
 
   const goBack = () => {
@@ -179,17 +262,15 @@
     } else {
       currentIndex -= 1;
     }
-    renderPhoto();
 
-    // Reset timer on manual interaction
+    void renderPhoto();
     if (isAutoPlaying) {
       startAutoAdvance();
     }
   };
 
-  // Manual next also resets timer
   const manualNext = () => {
-    goNext();
+    void goNext();
     if (isAutoPlaying) {
       startAutoAdvance();
     }
@@ -204,6 +285,7 @@
   document.addEventListener("keydown", (event) => {
     if (mode === "welcome") {
       if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
         showGallery();
       }
       return;
@@ -308,27 +390,7 @@
     document.addEventListener("touchstart", unlockAudio);
   }
 
-  // Unlock audio on any interaction if autoplay failed
-  const unlockAudio = () => {
-    if (bgAudio && bgAudio.paused) {
-      bgAudio.play().then(() => {
-        updateAudioState(true);
-        // Remove listeners once successful
-        document.removeEventListener("pointerdown", unlockAudio);
-        document.removeEventListener("keydown", unlockAudio);
-      }).catch(err => console.log("Audio unlock failed, waiting for next interaction"));
-    }
-  };
-
-  document.addEventListener("pointerdown", unlockAudio);
-  document.addEventListener("keydown", unlockAudio);
-
-  // Ensure Begin button specifically triggers it
-  beginBtn?.addEventListener("click", () => {
-    unlockAudio();
-    showGallery();
-  });
-
   updateControls();
+  warmUpNearbyImages(0);
   spawnHearts();
 })();
