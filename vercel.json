@@ -4,11 +4,20 @@
             "src": "app.py",
             "use": "@vercel/python",
             "config": {
+                "includeFiles": [
+                    "templates/**",
+                    "static/**",
+                    "slides.json"
+                ],
                 "excludeFiles": "static/images/**"
             }
         }
     ],
     "routes": [
+        {
+            "src": "/static/(.*)",
+            "dest": "/static/$1"
+        },
         {
             "src": "/(.*)",
             "dest": "app.py"
